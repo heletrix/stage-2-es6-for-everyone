@@ -73,14 +73,14 @@ function updateHealthLeft({ keys, key, firstFighter, secondFighter }) {
   // first attacks  
   if (key === controls.PlayerOneAttack) {
     const damage = keys[controls.PlayerTwoBlock] ? getDamage(secondFighter, firstFighter) : getHitPower(secondFighter);
-    secondFighter.healthLeft -= damage;
+    secondFighter.healthLeft -= (damage >= 0 ? damage : 0)
     return;
   }
 
   // second attacks
   if (key == controls.PlayerTwoAttack) {
     const damage = keys[controls.PlayerOneBlock] ? getDamage(firstFighter, secondFighter) : getHitPower(firstFighter);
-    firstFighter.healthLeft -= damage;
+    firstFighter.healthLeft -= (damage >= 0 ? damage : 0);
     return;
   }
 
