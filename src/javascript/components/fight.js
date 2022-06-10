@@ -70,17 +70,39 @@ function updateHealthLeft({ keys, key, firstFighter, secondFighter }) {
   if (key === controls.PlayerOneAttack && keys[controls.PlayerOneBlock]) { return; }
   if (key === controls.PlayerTwoAttack && keys[controls.PlayerTwoBlock]) { return; }
 
-  // first attacks  
+  // a first fighter's attack 
   if (key === controls.PlayerOneAttack) {
     const damage = keys[controls.PlayerTwoBlock] ? getDamage(secondFighter, firstFighter) : getHitPower(secondFighter);
     secondFighter.healthLeft -= (damage >= 0 ? damage : 0)
     return;
   }
 
-  // second attacks
+  // a second fighter's attack
   if (key == controls.PlayerTwoAttack) {
     const damage = keys[controls.PlayerOneBlock] ? getDamage(firstFighter, secondFighter) : getHitPower(firstFighter);
     firstFighter.healthLeft -= (damage >= 0 ? damage : 0);
+    return;
+  }
+
+  // a first fighter's critical attack
+  if (firstFighter.criticalHitAvailable && controls.PlayerOneCriticalHitCombination.every(key => keys[key])) {
+    const damage = 2 * firstFighter.attack;
+    firstFighter.criticalHitAvailable = false;
+    secondFighter.healthLeft -= damage;
+    setTimeout(() => { 
+      firstFighter.criticalHitAvailable = true; 
+    }, 10000);
+    return;
+  }
+
+  // a second fighter's critical attack
+  if (secondFighter.criticalHitAvailable && controls.PlayerTwoCriticalHitCombination.every(key => keys[key])) {
+    const damage = 2 * secondFighter.attack;
+    secondFighter.criticalHitAvailable = false;
+    firstFighter.healthLeft -= damage;
+    setTimeout(() => { 
+      secondFighter.criticalHitAvailable = true; 
+    }, 10000);
     return;
   }
 
