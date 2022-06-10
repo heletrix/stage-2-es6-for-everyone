@@ -8,8 +8,36 @@ export function createFighterPreview(fighter, position) {
   });
 
   // todo: show fighter info (image, name, health, etc.)
+  if (!fighter) {
+    return fighterElement;
+  }
+  
+  const fighterWrapper = createElement({ tagName: 'div' });
+
+  // image
+  const imgElement = createFighterImage(fighter);
+  fighterWrapper.append(imgElement);
+
+  // info
+  const fighterInfo = createElement({ tagName: 'div', className: 'arena___fighter-name'});
+  const paragraphs = [
+    createParagraph(`name: ${fighter.name}`),
+    createParagraph(`health: ${fighter.health}`),
+    createParagraph(`attack: ${fighter.attack}`),
+    createParagraph(`defense: ${fighter.defense}`)
+  ];
+  paragraphs.forEach(paragraph => fighterInfo.append(paragraph)); 
+  fighterWrapper.append(fighterInfo);
+
+  fighterElement.append(fighterWrapper);
 
   return fighterElement;
+}
+
+function createParagraph(text) {
+  const paragraphElement = createElement({ tagName: 'p' });
+  paragraphElement.innerText = text;
+  return paragraphElement;
 }
 
 export function createFighterImage(fighter) {
